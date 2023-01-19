@@ -29,6 +29,7 @@ import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import net.thisptr.jackson.jq.JsonQuery;
 import net.thisptr.jackson.jq.exception.JsonQueryException;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.data.input.impl.FastJacksonJsonNodeJsonProvider;
 import org.apache.druid.java.util.common.StringUtils;
 
@@ -174,9 +175,10 @@ public class JSONFlattenerMaker implements ObjectFlatteners.FlattenerMaker<JsonN
     if (val.isArray()) {
       List<Object> newList = new ArrayList<>();
       for (JsonNode entry : val) {
-        if (!entry.isNull()) {
-          newList.add(convertJsonNode(entry, enc));
+        if (NullHandling.replaceWithDefault()) {
+          continue;
         }
+        newList.add(convertJsonNode(entry, enc));
       }
       return newList;
     }

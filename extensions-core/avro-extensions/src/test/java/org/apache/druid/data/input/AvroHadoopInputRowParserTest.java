@@ -27,10 +27,12 @@ import org.apache.avro.file.FileReader;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.data.input.avro.AvroExtensionsModule;
 import org.apache.druid.java.util.common.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -47,6 +49,7 @@ public class AvroHadoopInputRowParserTest
     for (Module jacksonModule : new AvroExtensionsModule().getJacksonModules()) {
       jsonMapper.registerModule(jacksonModule);
     }
+    NullHandling.initializeForTestsWithValues(false, true);
   }
 
   @Test

@@ -117,7 +117,10 @@ public class AvroFlattenerMakerTest
 
     // array
     Assert.assertEquals(3, flattener.makeJsonPathExtractor("$.someMultiMemberUnion.array[2]").apply(
-        AvroStreamInputRowParserTest.buildSomeAvroDatumWithUnionValue(Arrays.asList(1, 2, 3))));
+        AvroStreamInputRowParserTest.buildSomeAvroDatumWithUnionValue(Arrays.asList(1, 2, 3, null))));
+
+    Assert.assertEquals(null, flattener.makeJsonPathExtractor("$.someMultiMemberUnion.array[3]").apply(
+            AvroStreamInputRowParserTest.buildSomeAvroDatumWithUnionValue(Arrays.asList(1, 2, 3, null))));
 
     // Named types are accessed by name
 
@@ -185,6 +188,10 @@ public class AvroFlattenerMakerTest
     Assert.assertEquals(
         record.getSomeStringArray(),
         flattener.getRootField(record, "someStringArray")
+    );
+    Assert.assertEquals(
+            record.getSomeStringArrayWithNull(),
+            flattener.getRootField(record, "someStringArrayWithNull")
     );
     Assert.assertEquals(
         record.getSomeIntValueMap(),
@@ -313,6 +320,10 @@ public class AvroFlattenerMakerTest
     Assert.assertEquals(
         record.getSomeStringArray(),
         flattener.makeJsonPathExtractor("$.someStringArray").apply(record)
+    );
+    Assert.assertEquals(
+            record.getSomeStringArrayWithNull(),
+            flattener.makeJsonPathExtractor("$.someStringArrayWithNull").apply(record)
     );
     Assert.assertEquals(
         record.getSomeIntValueMap(),

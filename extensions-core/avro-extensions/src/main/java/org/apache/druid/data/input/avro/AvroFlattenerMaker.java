@@ -30,6 +30,7 @@ import org.apache.avro.generic.GenericEnumSymbol;
 import org.apache.avro.generic.GenericFixed;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.java.util.common.StringUtils;
 import org.apache.druid.java.util.common.parsers.NotImplementedMappingProvider;
 import org.apache.druid.java.util.common.parsers.ObjectFlatteners;
@@ -176,7 +177,10 @@ public class AvroFlattenerMaker implements ObjectFlatteners.FlattenerMaker<Gener
     } else if (field instanceof Utf8) {
       return field.toString();
     } else if (field instanceof List) {
-      return ((List<?>) field).stream().filter(Objects::nonNull).map(this::transformValue).collect(Collectors.toList());
+      if (NullHandling.replaceWithDefault()) {
+        ((List<?>) field).stream().filter(Objects::nonNull).map(this::transformValue).collect(Collectors.toList());
+      }
+      return ((List<?>) field).stream().map(this::transformValue).collect(Collectors.toList());
     } else if (field instanceof GenericEnumSymbol) {
       return field.toString();
     } else if (field instanceof GenericFixed) {

@@ -25,11 +25,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.BinaryNode;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.java.util.common.StringUtils;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +41,12 @@ public class JSONFlattenerMakerTest
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   private static final JSONFlattenerMaker FLATTENER_MAKER = new JSONFlattenerMaker(true);
+
+  @BeforeClass
+  public static void setup()
+  {
+    NullHandling.initializeForTestsWithValues(false, true);
+  }
 
   @Test
   public void testStrings() throws JsonProcessingException
@@ -114,6 +123,19 @@ public class JSONFlattenerMakerTest
     JsonNode node = new BinaryNode(data);
     Object result = FLATTENER_MAKER.finalizeConversionForMap(node);
     Assert.assertEquals(data, result);
+  }
+
+  @Test
+  public void testNestedWithNulls() throws JsonProcessingException
+  {
+    JsonNode node;
+    Object result;
+    List<String> strArray = Arrays.asList("a", "b", null);
+    List<String> expectedStrArray = Arrays.asList("a", "b", null);
+    node = OBJECT_MAPPER.readTree(OBJECT_MAPPER.writeValueAsString(strArray));
+    Assert.assertTrue(node.isArray());
+    result = FLATTENER_MAKER.finalizeConversionForMap(node);
+    Assert.assertEquals(expectedStrArray, result);
   }
 
   @Test

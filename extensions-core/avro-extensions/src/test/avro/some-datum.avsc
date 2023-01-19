@@ -39,6 +39,16 @@
         }
       },
       {
+        "name": "someStringArrayWithNull",
+        "type": {
+          "type": "array",
+          "items": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      {
         "name": "someIntValueMap",
         "type": {
           "type": "map",

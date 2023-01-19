@@ -144,7 +144,7 @@ public class AvroOCFReaderTest
       Assert.assertFalse(iterator.hasNext());
       final Map<String, Object> rawColumns = row.getRawValues();
       Assert.assertNotNull(rawColumns);
-      Assert.assertEquals(20, rawColumns.size());
+      Assert.assertEquals(21, rawColumns.size());
       final List<InputRow> inputRows = row.getInputRows();
       Assert.assertNotNull(inputRows);
       final InputRow inputRow = Iterables.getOnlyElement(inputRows);

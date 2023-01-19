@@ -82,6 +82,7 @@ import static org.apache.druid.data.input.AvroStreamInputRowParserTest.buildSome
  *  "isValid": true,
  *  "someIntArray": [1, 2, 4, 8],
  *  "someStringArray": ["8", "4", "2", "1"],
+ *  "someStringArrayWithNull": ["8", null, "2"],
  *  "someIntValueMap": {"8": 8, "1": 1, "2": 2, "4": 4},
  *  "someStringValueMap": {"8": "8", "1": "1", "2": "2", "4": "4"},
  *  "someUnion": "string as union",
@@ -380,7 +381,7 @@ public class AvroStreamInputFormatTest extends InitializedNullHandlingTest
         flattenSpec,
         new SchemaRepoBasedAvroBytesDecoder<>(new Avro1124SubjectAndIdConverter(TOPIC), repository),
         false,
-        false
+        true
     );
     NestedInputFormat inputFormat2 = jsonMapper.readValue(
         jsonMapper.writeValueAsString(inputFormat),

@@ -141,7 +141,7 @@ public class JsonLineReaderTest
       while (iterator.hasNext()) {
         final InputRow row = iterator.next();
         Assert.assertEquals("test", Iterables.getOnlyElement(row.getDimension("bar")));
-        Assert.assertEquals(Collections.emptyList(), row.getDimension("foo"));
+        Assert.assertEquals("null", Iterables.getOnlyElement(row.getDimension("foo")));
         Assert.assertTrue(row.getDimension("baz").isEmpty());
         numActualIterations++;
       }

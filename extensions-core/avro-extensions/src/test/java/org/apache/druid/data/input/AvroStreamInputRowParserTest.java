@@ -129,6 +129,9 @@ public class AvroStreamInputRowParserTest
                                                                   .setSubLong(SUB_LONG_VALUE)
                                                                   .build();
   private static final List<CharSequence> SOME_STRING_ARRAY_VALUE = Arrays.asList("8", "4", "2", "1");
+
+  private static final List<CharSequence> SOME_STRING_ARRAY_WITH_NULL_VALUE = Arrays.asList("8", null, "2");
+
   private static final List<Integer> SOME_INT_ARRAY_VALUE = Arrays.asList(1, 2, 4, 8);
   static final Map<CharSequence, Integer> SOME_INT_VALUE_MAP_VALUE = Maps.asMap(
       new HashSet<>(Arrays.asList("8", "2", "4", "1")), new Function<CharSequence, Integer>()
@@ -326,6 +329,10 @@ public class AvroStreamInputRowParserTest
           Lists.transform(SOME_STRING_ARRAY_VALUE, String::valueOf),
           inputRow.getDimension("someStringArray")
       );
+      Assert.assertEquals(
+              Lists.transform(SOME_STRING_ARRAY_WITH_NULL_VALUE, String::valueOf),
+              inputRow.getDimension("someStringArrayWithNull")
+      );
 
       final Object someRecordArrayObj = inputRow.getRaw("someRecordArray");
       Assert.assertNotNull(someRecordArrayObj);
@@ -358,6 +365,7 @@ public class AvroStreamInputRowParserTest
     Assert.assertEquals("2", someStringValueMap.get("2"));
     Assert.assertEquals("4", someStringValueMap.get("4"));
     Assert.assertEquals("8", someStringValueMap.get("8"));
+
 
 
     final Object someRecordObj = inputRow.getRaw("someRecord");
@@ -433,6 +441,7 @@ public class AvroStreamInputRowParserTest
                         .setSomeLong(SOME_LONG_VALUE)
                         .setSomeIntArray(SOME_INT_ARRAY_VALUE)
                         .setSomeStringArray(SOME_STRING_ARRAY_VALUE)
+                        .setSomeStringArrayWithNull(SOME_STRING_ARRAY_WITH_NULL_VALUE)
                         .setSomeIntValueMap(SOME_INT_VALUE_MAP_VALUE)
                         .setSomeStringValueMap(SOME_STRING_VALUE_MAP_VALUE)
                         .setSomeUnion(SOME_UNION_VALUE)

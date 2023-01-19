@@ -23,11 +23,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.apache.druid.TestObjectMapper;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.java.util.common.parsers.JSONPathFieldSpec;
 import org.apache.druid.java.util.common.parsers.JSONPathFieldType;
 import org.apache.druid.java.util.common.parsers.JSONPathSpec;
 import org.apache.druid.java.util.common.parsers.Parser;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -40,6 +42,12 @@ import java.util.Map;
 public class JSONParseSpecTest
 {
   private final ObjectMapper jsonMapper = new TestObjectMapper();
+
+  @BeforeClass
+  public static void setup()
+  {
+    NullHandling.initializeForTestsWithValues(false, true);
+  }
 
   @Test
   public void testParseRow()
@@ -102,7 +110,7 @@ public class JSONParseSpecTest
     );
 
     final Map<String, Object> expected = new HashMap<>();
-    expected.put("foo", new ArrayList());
+    expected.put("foo", Collections.singletonList(null));
     expected.put("baz", null);
     expected.put("bar", Collections.singletonList("test"));
 

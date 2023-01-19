@@ -21,7 +21,9 @@ package org.apache.druid.java.util.common.parsers;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.apache.druid.common.config.NullHandling;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -53,6 +55,12 @@ public class JSONPathParserTest
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+
+  @BeforeClass
+  public static void setup()
+  {
+    NullHandling.initializeForTestsWithValues(false, true);
+  }
 
   @Test
   public void testSimple()
