@@ -366,8 +366,7 @@ public class AvroStreamInputRowParserTest
     Assert.assertEquals("4", someStringValueMap.get("4"));
     Assert.assertEquals("8", someStringValueMap.get("8"));
 
-
-
+    
     final Object someRecordObj = inputRow.getRaw("someRecord");
     Assert.assertNotNull(someRecordObj);
     Assert.assertTrue(someRecordObj instanceof LinkedHashMap);
