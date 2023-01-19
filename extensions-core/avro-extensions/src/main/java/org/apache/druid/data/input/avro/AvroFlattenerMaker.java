@@ -178,7 +178,7 @@ public class AvroFlattenerMaker implements ObjectFlatteners.FlattenerMaker<Gener
       return field.toString();
     } else if (field instanceof List) {
       if (NullHandling.replaceWithDefault()) {
-        ((List<?>) field).stream().filter(Objects::nonNull).map(this::transformValue).collect(Collectors.toList());
+        return ((List<?>) field).stream().filter(Objects::nonNull).map(this::transformValue).collect(Collectors.toList());
       }
       return ((List<?>) field).stream().map(this::transformValue).collect(Collectors.toList());
     } else if (field instanceof GenericEnumSymbol) {
