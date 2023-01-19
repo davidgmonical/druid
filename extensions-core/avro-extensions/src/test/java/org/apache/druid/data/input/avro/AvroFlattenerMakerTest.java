@@ -19,14 +19,17 @@
 
 package org.apache.druid.data.input.avro;
 
+import com.fasterxml.jackson.databind.Module;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.data.input.AvroStreamInputRowParserTest;
 import org.apache.druid.data.input.SomeAvroDatum;
 import org.apache.druid.data.input.UnionSubEnum;
 import org.apache.druid.data.input.UnionSubFixed;
 import org.apache.druid.data.input.UnionSubRecord;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -45,6 +48,13 @@ public class AvroFlattenerMakerTest
       new AvroFlattenerMaker(false, false, true);
 
   private static final SomeAvroDatum RECORD = AvroStreamInputRowParserTest.buildSomeAvroDatum();
+
+  
+  @Before
+  public void before()
+  {
+    NullHandling.initializeForTestsWithValues(false, true);
+  }
 
   @Test
   public void getRootField_flattenerWithoutExtractUnionsByType()

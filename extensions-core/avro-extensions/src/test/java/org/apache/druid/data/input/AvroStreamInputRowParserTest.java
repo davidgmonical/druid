@@ -32,6 +32,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.data.input.avro.AvroExtensionsModule;
 import org.apache.druid.data.input.avro.AvroParseSpec;
 import org.apache.druid.data.input.avro.SchemaRepoBasedAvroBytesDecoder;
@@ -174,6 +175,7 @@ public class AvroStreamInputRowParserTest
     for (Module jacksonModule : new AvroExtensionsModule().getJacksonModules()) {
       jsonMapper.registerModule(jacksonModule);
     }
+    NullHandling.initializeForTestsWithValues(false, true);
   }
 
   @Test

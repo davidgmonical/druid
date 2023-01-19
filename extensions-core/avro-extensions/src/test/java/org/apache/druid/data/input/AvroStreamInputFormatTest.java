@@ -29,6 +29,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.apache.druid.common.config.NullHandling;
 import org.apache.druid.data.input.avro.AvroExtensionsModule;
 import org.apache.druid.data.input.avro.AvroStreamInputFormat;
 import org.apache.druid.data.input.avro.SchemaRegistryBasedAvroBytesDecoder;
@@ -147,6 +148,7 @@ public class AvroStreamInputFormatTest extends InitializedNullHandlingTest
     jsonMapper.setInjectableValues(
         new InjectableValues.Std().addValue(ObjectMapper.class, new DefaultObjectMapper())
     );
+    NullHandling.initializeForTestsWithValues(false, true);
   }
 
   @Test
