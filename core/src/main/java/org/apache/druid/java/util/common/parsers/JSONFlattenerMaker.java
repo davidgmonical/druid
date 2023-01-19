@@ -175,7 +175,7 @@ public class JSONFlattenerMaker implements ObjectFlatteners.FlattenerMaker<JsonN
     if (val.isArray()) {
       List<Object> newList = new ArrayList<>();
       for (JsonNode entry : val) {
-        if (!NullHandling.replaceWithDefault()) {
+        if (!entry.isNull() || !NullHandling.replaceWithDefault()) {
           newList.add(convertJsonNode(entry, enc));
         }
       }
