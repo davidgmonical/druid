@@ -122,6 +122,43 @@ public class JSONParseSpecTest
   }
 
   @Test
+  public void testParseRowWithNullObject() {
+    final JSONParseSpec parseSpec = new JSONParseSpec(
+            new TimestampSpec("timestamp", "iso", null),
+            new DimensionsSpec(DimensionsSpec.getDefaultSchemas(ImmutableList.of("foo"))),
+            new JSONPathSpec(
+                    true,
+                    ImmutableList.of(
+                            new JSONPathFieldSpec(JSONPathFieldType.PATH, "foo", "$.[?(@.maybe_object)].maybe_object.foo.test")
+                    )
+            ),
+            null,
+            false
+    );
+
+    final Map<String, Object> expected = new HashMap<>();
+    expected.put("foo", Collections.singletonList(null));
+
+    final String jsonStr = "{\"something_else\": {\"foo\": \"test\"}}";
+
+    // Set configuration to replace nulls with default values
+    NullHandling.initializeForTestsWithValues(true, true);
+
+    final Parser<String, Object> parserWithRelaceNullTrue = parseSpec.makeParser();
+    final Map<String, Object> parsedRowWithRelaceNullTrue = parserWithRelaceNullTrue.parseToMap(jsonStr);
+
+    Assert.assertEquals(Collections.emptyList(), parsedRowWithRelaceNullTrue.get("foo"));
+
+    // Set configuration to NOT replace nulls with default values
+    NullHandling.initializeForTestsWithValues(false, true);
+
+    final Parser<String, Object> parserWithRelaceNullFalse = parseSpec.makeParser();
+    final Map<String, Object> parsedRowWithRelaceNullFalse = parserWithRelaceNullFalse.parseToMap(jsonStr);
+
+    Assert.assertEquals(Collections.singletonList(null), parsedRowWithRelaceNullFalse.get("foo"));
+  }
+
+  @Test
   public void testSerde() throws IOException
   {
     HashMap<String, Boolean> feature = new HashMap<String, Boolean>();

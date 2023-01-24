@@ -128,14 +128,19 @@ public class JSONFlattenerMakerTest
   @Test
   public void testNestedWithNulls() throws JsonProcessingException
   {
-    JsonNode node;
-    Object result;
     List<String> strArray = Arrays.asList("a", "b", null);
-    List<String> expectedStrArray = Arrays.asList("a", "b", null);
-    node = OBJECT_MAPPER.readTree(OBJECT_MAPPER.writeValueAsString(strArray));
+    JsonNode node = OBJECT_MAPPER.readTree(OBJECT_MAPPER.writeValueAsString(strArray));
     Assert.assertTrue(node.isArray());
+
+    // Test when configuration is set to replace null values with defaults
+    NullHandling.initializeForTestsWithValues(true, true);
+    Object result = FLATTENER_MAKER.finalizeConversionForMap(node);
+    Assert.assertEquals(Arrays.asList("a", "b"), result);
+
+    // Test when configuration is set to NOT replace null values with defaults
+    NullHandling.initializeForTestsWithValues(false, true);
     result = FLATTENER_MAKER.finalizeConversionForMap(node);
-    Assert.assertEquals(expectedStrArray, result);
+    Assert.assertEquals(Arrays.asList("a", "b", null), result);
   }
 
   @Test
